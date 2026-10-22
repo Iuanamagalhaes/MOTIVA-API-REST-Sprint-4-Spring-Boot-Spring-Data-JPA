@@ -1,0 +1,4 @@
+package br.com.motiva.model;
+
+public class EquipeManutencao {
+}
