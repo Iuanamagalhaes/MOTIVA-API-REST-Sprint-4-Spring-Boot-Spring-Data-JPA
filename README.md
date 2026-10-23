@@ -199,6 +199,47 @@ curl "http://localhost:8080/api/relatorios/periodo?inicio=2026-10-01&fim=2026-10
 
 ## Evidências (prints das requisições)
 
+Requisições executadas no Postman, com a API rodando contra o Oracle da FIAP.
+
+### 1. POST /api/trechos: cria um trecho (201 Created)
+Cria um trecho novo (id 41) e devolve o recurso criado.
+
+![POST trecho](docs/teste_post_trecho.png)
+
+### 2. GET /api/trechos: lista todos os trechos (200 OK)
+
+![GET trechos](docs/teste_get_trechos.png)
+
+### 3. GET /api/trechos?nivelMinimo=40: filtro com derived query (200 OK)
+Usa `findByNivelVegetacaoGreaterThanEqual`; o SQL é gerado pelo Spring Data.
+
+![GET trechos com filtro](docs/teste_get_trechos_com_filtro.png)
+
+### 4. PUT /api/trechos/{id}: atualiza um trecho (200 OK)
+
+![PUT trecho](docs/teste_put_trecho.png)
+
+### 5. DELETE /api/trechos/{id}: remove um trecho (204 No Content)
+
+![DELETE trecho](docs/teste_delete_trecho.png)
+
+### 6. GET /api/trechos/{id} após a exclusão: trecho inexistente (404 Not Found)
+Resposta de erro padronizada pelo `@RestControllerAdvice`.
+
+![GET trecho deletado](docs/teste_get_trecho_deletado.png)
+
+### 7. POST /api/trechos com dado inválido (400 Bad Request)
+O Service rejeita `quilometroFinal <= quilometroInicial` (regra de negócio da Sprint 1).
+
+![POST trecho inválido](docs/teste_post_trecho_bad_request.png)
+
+### 8. POST /api/relatorios: gera o relatório e grava no histórico (201 Created)
+
+![POST relatório](docs/teste_post_relatorio.png)
+
+### 9. GET /api/relatorios/periodo: consulta o histórico por período (200 OK)
+
+![GET relatórios por período](docs/teste_get_relatorios_periodo.png)
 
 ## Perguntas de reflexão
 
