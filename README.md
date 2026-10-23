@@ -31,31 +31,58 @@ Fluxo: **Controller → Service → Repository → Banco**
 
 ## Como executar
 
-Pré-requisitos: **Java 17** e **Maven**; acesso ao Oracle da FIAP.
-1. Crie as tabelas e dados (uma vez), executando `sql/script-criacao.sql` e `sql/script-dados.sql`
-   no Oracle (as tabelas são as mesmas da Sprint 3).
-2. Informe suas credenciais **sem escrevê-las no código** — escolha uma opção:
+**Pré-requisitos:** Java 17+, Maven (ou IntelliJ IDEA) e acesso ao Oracle da FIAP
+(rede/VPN da FIAP).
 
-   ```bash
-   # Opção A: variáveis de ambiente
-   export DB_USER=rm123456
-   export DB_PASSWORD=sua_senha
-   # (opcional) export DB_URL=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-   ```
-   ```properties
-   # Opção B: arquivo ./application-local.properties na raiz (já está no .gitignore)
-   spring.datasource.username=rm123456
-   spring.datasource.password=sua_senha
-   ```
-3. Suba a API:
+Observação: As tabelas são as mesmas da Sprint 3, já existem, não é preciso recriar.
 
-   ```bash
-   mvn spring-boot:run
-   ```
-   A API fica em `http://localhost:8080`. O SQL gerado pelo Spring Data aparece no console
-   (`spring.jpa.show-sql=true`).
-4. Testes (usam H2 em memória, **não** tocam no Oracle): `mvn test`
+### 2. Configurar usuário e senha
 
+O arquivo `src/main/resources/application.properties` traz apenas **placeholders**
+(`SEU_RM` / `SUA_SENHA`). Para rodar localmente, escolha **uma** das opções:
+
+**Opção A: variáveis de ambiente** `DB_USER` e `DB_PASSWORD`
+(no IntelliJ: *Run > Edit Configurations > Environment variables*):
+
+```
+DB_USER=rm123456;DB_PASSWORD=sua_senha
+```
+
+**Opção A: editar direto o `application.properties`**, apenas para teste local.
+
+### 3. Rodar a aplicação
+
+**Pelo IntelliJ:** abra `MotivaApplication.java` e clique no botão verde ▶ ao lado do
+`main` (*Run 'MotivaApplication'*).
+
+**Pelo terminal:**
+
+```bash
+mvn spring-boot:run
+```
+
+Quando aparecer `Started MotivaApplication` no console, a API está disponível em
+**http://localhost:8080**. O SQL gerado pelo Spring Data também aparece no console
+(`spring.jpa.show-sql=true`).
+
+### 4. Testar
+
+Use o Postman ou os exemplos cURL da seção abaixo. Por exemplo:
+
+```bash
+curl http://localhost:8080/api/trechos
+```
+
+Os testes usam um banco H2 em memória e **não** acessam o Oracle.
+
+### Problemas comuns
+
+| Erro | Causa provável |
+|---|---|
+| `ORA-01017: invalid username/password` | Usuário ou senha incorretos |
+| `ORA-00942: table or view does not exist` | Scripts SQL não executados no seu usuário |
+| `Connection refused` / timeout | Fora da rede/VPN da FIAP |
+| `Port 8080 was already in use` | Outra aplicação usando a porta; encerre-a ou use `server.port=8081` |
 
 ## Regras do motor de prioridade (Sprint 2/3)
 
